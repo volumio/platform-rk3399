@@ -4,6 +4,7 @@
 - Kernel 5.10.93, switched kernel configuration to solve alsa issues
 - Added kernel bluetooth support
 - Added ```bcrm_patchram_plus``` and ```rk3399-bluetooth.service``` 
+- Switched to rk3399-nanopi-m4b.dtb
 - Entered alternative method for first-time compile with Armbian (see below) 
 
 
