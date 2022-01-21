@@ -46,6 +46,10 @@ With the very first compile, you need to
 - copy ```rk3399-nanopi-m4b.dts``` from *platform-rk3399/nanopim4/armbian* to *armbian-volumio/output/cache/linux-mainline/linux-5.x.y/arch/arm64/boot/dts/rockchip*
 - modify ```Makefile``` in *armbian/output/cache/sources/linux-mainline/linux-5.x.y/arch/arm64/boot/dts/rockchip* to compile the new dts.  
 
+**Alternative method for first compile**
+- copy ```linux-rockchip64-current.config``` from *platform-rk3399/nanopim4/armbian* to *armbian-volumio/output/config*.
+- copy ```kernel-rockchip64-current.patch``` from *platform-rk3399/nanopim4/armbian* to *armbian-volumio/output/patch*.
+
 After you have done any other modifications in *output/cache/sources/linux-mainline/linux-5.x.y* (or don't have any) press \<Enter>.  
 ==> You will find your patches here: *armbian-volumio/output/patch/kernel-rockchip64-current.patch*, it is incremental.
 
