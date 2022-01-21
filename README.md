@@ -1,3 +1,11 @@
+## Changelog
+
+2022-01-21/ gkkpch 
+- Kernel 5.10.93, switched kernel configuration to solve alsa issues
+- Added kernel bluetooth support
+- Added ```bcrm_patchram_plus``` and ```rk3399-bluetooth.service``` 
+- Entered alternative method for first-time compile with Armbian (see below) 
+
 
 ## Prerequisites for building with Armbian
 
