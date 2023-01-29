@@ -4,7 +4,6 @@
 - Kernel 5.10.93, switched kernel configuration to solve alsa issues
 - Added kernel bluetooth support
 - Added ```bcrm_patchram_plus``` and ```rk3399-bluetooth.service``` 
-- Switched to rk3399-nanopi-m4b.dtb
 - Entered alternative method for first-time compile with Armbian (see below) 
 
 
@@ -96,3 +95,11 @@ This will be part of the nanopim4 build recipe.
 It will unpack firmware, image and u-boot debs and put the information straight into the right place.
 
 
+|Date|Author|Change
+|---|---|---|
+|16.12.2021|gkkpch|Initial
+|12.01.2022|gkkpch|Finished kernel buildscript
+|21.01.2022|gkkpch|Switched to rk3399-nanopi-m4b.dtb
+|||Basis bluetooth support
+|||Abandoned
+|29.02.2023|gkkpch|Revived with kernel 5.15,y, fixed alsa & bluetooth issues
