@@ -87,7 +87,8 @@ It will unpack firmware, image and u-boot debs and put the information straight 
 
 ## Changelog
 
-<sub>
+<sub>  
+  
 |Date|Author|Change
 |---|---|---|
 |16.12.2021|gkkpch|Initial
