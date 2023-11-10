@@ -1,10 +1,10 @@
 # PLATFORM-RK3399
 ## Prerequisites for building with Armbian for Volumio platform files
 
--x86_64 or aarch64 machine with at least 2GB of memory and >= 35GB of disk space for a virtual machine, WSL2, container or bare metal installation
--Ubuntu Jammy 22.04.x amd64 for native building 
--Superuser rights (configured sudo or root access).
--Make sure all your system components are up-to-date. 
+- x86_64 or aarch64 machine with at least 2GB of memory and >= 35GB of disk space for a virtual machine, WSL2, container or bare metal installation.  
+- Ubuntu Jammy 22.04.x amd64 for native building.  
+- Superuser rights (configured sudo or root access).  
+- Make sure all your system components are up-to-date.  
 
 ## How to build the Armbian kernel and u-boot for Volumio?
 
