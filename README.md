@@ -53,3 +53,4 @@ Once finmished local patching the kernel configuration can be modified.
 |20230229|gkkpch|Revived with kernel 5.15,y, fixed alsa & bluetooth issues
 |20231110|gkkpch|Refactored with Armbian integration and script ```mkplatform.sh```. 
 |||Kernel version 6.1
+|20231111|gkkpch|Fix "./compile.sh kernel-patch" processing
