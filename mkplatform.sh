@@ -17,7 +17,7 @@ T="nanopim4"
 
 KERNELPATCH="no"
 PATCH_PREFIX="xvolumio-"
-KERNELCONFIGURE="no"
+KERNELCONFIGURE="yes"
 
 
 # Make sure we grab the right version
@@ -63,7 +63,7 @@ echo "Building for $T -- with Armbian ${ARMBIAN_VERSION} -- $B"
 ./compile.sh ARTIFACT_IGNORE_CACHE=yes BOARD=${T} BRANCH=${B} uboot 
 
 if [ $KERNELPATCH == yes ]; then
-  ./compile.sh ARTIFACT_IGNORE_CACHE=yes BOARD=${T2} BRANCH=${B} kernel-patch 
+  ./compile.sh ARTIFACT_IGNORE_CACHE=yes BOARD=${T} BRANCH=${B} kernel-patch 
 # Note: armbian patch files are applied in alphabetic order!!!
 # To make sure that user patches are applied after Armbian's own patches, use a unique pre-fix"
   if [ -f "${A}"/output/patch/kernel-"${K}"-"${B}".patch ]; then
@@ -71,6 +71,11 @@ if [ $KERNELPATCH == yes ]; then
     cp "${C}"/patches/"${PATCH_PREFIX}"-kernel-"${K}"-"${B}".patch "${A}"/userpatches/kernel/"${K}"-"${B}"/
     rm "${A}"/output/patch/kernel-"${K}"-"${B}".patch
   fi
+fi
+
+if [ $CONFIGURE == yes ]; then
+  ./compile.sh ARTIFACT_IGNORE_CACHE=yes BOARD=${T} BRANCH=${B} kernel-config 
+  cp "${A}"/userpatches/linux-"${K}"-"${B}".config "${C}"/kernel-config/
 fi
 
 ./compile.sh CLEAN_LEVEL=images,debs,make-kernel ARTIFACT_IGNORE_CACHE=yes BOARD=${T} BRANCH=${B} kernel
