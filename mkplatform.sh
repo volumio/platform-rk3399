@@ -16,7 +16,7 @@ K="rockchip64"
 T="nanopim4"
 
 KERNELPATCH="no"
-PATCH_PREFIX="xvolumio-"
+PATCH_PREFIX="0003-volumio-"
 KERNELCONFIGURE="yes"
 
 
