@@ -1,101 +1,56 @@
-## Prerequisites for building with Armbian
+# PLATFORM-RK3399
+## Prerequisites for building with Armbian for Volumio platform files
 
-- x64 machine with at least 2GB of memory and ~35GB of disk space for a VM, container or native OS,
-- Ubuntu Hirsute 21.04 x64 for native building or any [Docker](https://docs.armbian.com/Developer-Guide_Building-with-Docker/) capable x64 Linux for containerised,
-  - Hirsute is required for newer non-LTS releases.. ex: Bullseye, Sid, Groovy, Hirsute
-  - If building for LTS releases.. ex: Focal, Bionic, Buster, it is possible to use Ubuntu 20.04 Focal, but it is not supported
-- superuser rights (configured sudo or root access).
+- x86_64 or aarch64 machine with at least 2GB of memory and >= 35GB of disk space for a virtual machine, WSL2, container or bare metal installation.  
+- Ubuntu Jammy 22.04.x amd64 for native building.  
+- Superuser rights (configured sudo or root access).  
+- Make sure all your system components are up-to-date.  
 
 ## How to build the Armbian kernel and u-boot for Volumio?
 
-Download the armbian build system
+Download the armbian build system (example rockchip64, but any local name is valid)
 ```
 sudo apt-get install git
-git clone https://github.com/armbian/build armbian-volumio
+git clone https://github.com/armbian/build armbian-rockchip64
 ```
-Prepare the customized build script
+
+Download the platform-folder, when existing.
+Otherwise create a new platform-folder, using an existing one as a template.
+Then adapt script <platform-folder>mkplatform.sh to your needs.
 ```
-cd armbian-volumio
-cat <<-EOF > compile-custom-nanopim4.sh
-sudo ./compile.sh  BOARD=nanopim4 BRANCH=current KERNEL_ONLY=yes KERNEL_CONFIGURE=yes KERNEL_KEEP_CONFIG=yes CREATE_PATCHES=yes
-EOF
-sudo chmod +x compile-custom-nanopim4.sh
-cd ..
-git clone https://github.com/gkkpch/platform-rk3399
+git clone http://github.com/volumio/platform-rk3399
+```
+
+### (Re-)Generating the platform files
+
+Start the build script
+```
 cd platform-rk3399
-tar xfJ nanopim4.tar.xz
-cd ..
+cd /mkplatform.sh
 ```
 
-## Start u-boot and kernel configurations
-```
-cd armbian-volumio
-./compile-custom-nanopim4.sh
-```
 This will download all further prerequisites.  
-Once finished downloading and all patches have been applied, you get the opportunity to add your own patches (valid both for u-boot and kernel).  
+Once finished downloading and all patches have been applied, you get the opportunity to add your own local patches.  
+(mkplatform.sh prerequisite: KERNELPATH="yes").
 
-The first patch break is before compiling u-boot, now modify the sources in *armbian-volumio/output/cache/sources/u-boot/*.  
-After you have done the modifications (or don't have any) press \<Enter>.  
+Once finmished local patching the kernel configuration can be modified.
+(mkplatform.sh prerequisite: KERNELCONFIGURE="yes").
 
-The next patch break will be before compiling the kernel.  
-**Important:**  
-With the very first compile, you need to 
-- copy ```linux-rockchip64-current.config``` from *platform-rk3399/nanopim4/armbian* to *armbian-volumio/output/config*.
-- copy ```rk3399-nanopi-m4b.dts``` from *platform-rk3399/nanopim4/armbian* to *armbian-volumio/output/cache/linux-mainline/linux-5.x.y/arch/arm64/boot/dts/rockchip*
-- modify ```Makefile``` in *armbian/output/cache/sources/linux-mainline/linux-5.x.y/arch/arm64/boot/dts/rockchip* to compile the new dts.  
-
-**Alternative method for first compile**
-- copy ```linux-rockchip64-current.config``` from *platform-rk3399/nanopim4/armbian* to *armbian-volumio/output/config*.
-- copy ```kernel-rockchip64-current.patch``` from *platform-rk3399/nanopim4/armbian* to *armbian-volumio/output/patch*.
-
-After you have done any other modifications in *output/cache/sources/linux-mainline/linux-5.x.y* (or don't have any) press \<Enter>.  
-==> You will find your patches here: *armbian-volumio/output/patch/kernel-rockchip64-current.patch*, it is incremental.
-
-Next step is Kernel Configuration, just <exit> when you do not want to modify anything.  
-**Note 1:** Modified kernel settings will be saved for the next build.  
-**Note 2:** When you want to keep a backup of kernel configurations and patches, copy them from *armbian/output/patch/* and *armbian/output/config*  
-
-## Recompiling
-
-Restart the u-boot and kernel compilation.  
-```
-./compile-custom-nanopim4.sh
-```
-This time you only pay attention to the 2 patch breaks and the kernel config.
-Ignore them when there are no changes.
-
-
-
-## When finished
-
-Move the following .deb packages from *armbian/output/debs* to *platform-rk3399/nanopim4/*
-```
-armbian-firmware_x.y.z-trunk_all.deb
-linux-headers-current-rockchip64_x.y.z-trunk_arm64.deb
-linux-image-current-rockchip64_x.y.z-trunk_arm64.deb
-linux-u-boot-current-nanopim4_x.y.z-trunk_arm64.deb
-```
-Where x.y.z is the used armbian version.  
-(At the time of writing 21.11.0)  
-Refer to ```armbian-firmware-full_x.y.z-trunk_all.deb``` for a full copy of all current firmware for 5.x.y  
-
-## Generating platform files
-
-This will be part of the nanopim4 build recipe.  
-It will unpack firmware, image and u-boot debs and put the information straight into the right place.
 
 ## Changelog
 
-<sub>  
+
   
 |Date|Author|Change
 |---|---|---|
-|16.12.2021|gkkpch|Initial
-|12.01.2022|gkkpch|Finished kernel buildscript
-|21.01.2022|gkkpch|Switched to rk3399-nanopi-m4b.dtb
+|20211216|gkkpch|Initial
+|20220112|gkkpch|Finished kernel buildscript
+|20220121|gkkpch|Switched to ```rk3399-nanopi-m4b.dtb```
 |||Kernel 5.10.93, switched kernel configuration
 |||Added kernel bluetooth support
 |||Added ```bcrm_patchram_plus``` and ```rk3399-bluetooth.service``` 
 |||Abandoned
-|29.02.2023|gkkpch|Revived with kernel 5.15,y, fixed alsa & bluetooth issues
+|20230229|gkkpch|Revived with kernel 5.15,y, fixed alsa & bluetooth issues
+|20231110|gkkpch|Refactored with Armbian integration and script ```mkplatform.sh```. 
+|||Kernel version 6.1
+|20231111|gkkpch|Fix "./compile.sh kernel-patch" processing
