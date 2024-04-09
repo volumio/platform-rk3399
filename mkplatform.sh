@@ -10,14 +10,14 @@ else
 fi
 
 C=$(pwd)
-A=../armbian-rockchip64
+A=../../armbian-master
 B="current"
 K="rockchip64"
 T="nanopim4"
 
 KERNELPATCH="no"
-PATCH_PREFIX="0003-volumio-"
-KERNELCONFIGURE="yes"
+PATCH_PREFIX="volumio-"
+KERNELCONFIGURE="no"
 
 
 # Make sure we grab the right version
@@ -53,7 +53,7 @@ fi
 
 if [ -d "${A}"/output/debs ]; then
   echo "Cleaning previous .deb builds"
-  rm "${A}"/output/debs/*
+  rm -rf "${A}"/output/debs/*
 fi
 
 cd ${A}
@@ -64,18 +64,19 @@ echo "Building for $T -- with Armbian ${ARMBIAN_VERSION} -- $B"
 
 if [ $KERNELPATCH == yes ]; then
   ./compile.sh ARTIFACT_IGNORE_CACHE=yes BOARD=${T} BRANCH=${B} kernel-patch 
-# Note: armbian patch files are applied in alphabetic order!!!
-# To make sure that user patches are applied after Armbian's own patches, use a unique pre-fix"
-  if [ -f "${A}"/output/patch/kernel-"${K}"-"${B}".patch ]; then
-    cp "${A}"/output/patch/kernel-"${K}"-"${B}".patch "${C}"/patches/"${PATCH_PREFIX}"-kernel-"${K}"-"${B}".patch
-    cp "${C}"/patches/"${PATCH_PREFIX}"-kernel-"${K}"-"${B}".patch "${A}"/userpatches/kernel/"${K}"-"${B}"/
-    rm "${A}"/output/patch/kernel-"${K}"-"${B}".patch
+
+  # Note: armbian patch files are applied in alphabetic order!!!
+  # To make sure that user patches are applied after Armbian's own patches, use a unique pre-fix"
+  if [ -f ./output/patch/kernel-"${K}"-"${B}".patch ]; then
+    cp ./output/patch/kernel-"${K}"-"${B}".patch "${C}"/patches/"${PATCH_PREFIX}"-kernel-"${K}"-"${B}".patch
+    cp "${C}"/patches/"${PATCH_PREFIX}"-kernel-"${K}"-"${B}".patch ./userpatches/kernel/"${K}"-"${B}"/
+    rm ./output/patch/kernel-"${K}"-"${B}".patch
   fi
 fi
 
-if [ $CONFIGURE == yes ]; then
+if [ $KERNELCONFIGURE == yes ]; then
   ./compile.sh ARTIFACT_IGNORE_CACHE=yes BOARD=${T} BRANCH=${B} kernel-config 
-  cp "${A}"/userpatches/linux-"${K}"-"${B}".config "${C}"/kernel-config/
+  cp ./userpatches/linux-"${K}"-"${B}".config "${C}"/kernel-config/
 fi
 
 ./compile.sh CLEAN_LEVEL=images,debs,make-kernel ARTIFACT_IGNORE_CACHE=yes BOARD=${T} BRANCH=${B} kernel
@@ -166,7 +167,6 @@ cp "${C}"/bootparams/armbianEnv-"${T}".txt "${T}"/boot/armbianEnv.txt
 touch "${T}"/boot/.next
 
 # Prepare boot parameters
-ls 
 cp "${C}"/bootparams/armbianEnv-"${T}".txt "${T}"/boot/armbianEnv.txt
 
 echo "Creating device tarball.."
